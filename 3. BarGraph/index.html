@@ -10,9 +10,40 @@
 
 <body>
   <script src="https://d3js.org/d3.v7.min.js"></script>
-
   <script>
+    const data = [55, 44, 30, 23, 17, 14, 16, 25, 41, 61, 85,
+      101, 95, 105, 114, 150, 180, 210, 125, 100, 71,
+      75, 72, 67
+    ];
 
+    const barWidth = 15;
+    const barPadding = 3;
+
+    const maxValue = d3.max(data)
+
+    // calculate x and y
+    const xloc = (d, i) => i * (barWidth + barPadding);
+    const yloc = (d) => maxValue - d;
+
+    // translator to position each bar
+    const translator = (d, i) => {
+      return `translate(${xloc(d,i)}, ${yloc(d)})`
+    };
+
+    var graphGroup = d3.select('body')
+      .append('svg')
+      .attr('width', '1000')
+      .attr('height', '1000')
+      .append('g');
+
+    const barGroup = graphGroup.selectAll('rect')
+      .data(data)
+      .enter()
+      .append('rect')
+      .attr('fill', 'steelblue')
+      .attr('transform', translator)
+      .attr('width', barWidth)
+      .attr('height', d => d)
   </script>
 </body>
 
