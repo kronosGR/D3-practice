@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <button onclick="render([5,15])">Take action</button>
+  <div id='div1'>A</div>
+  <div id='div2'>B</div>
+  <div id='div3'>C</div>
+  <div id='div4'>D</div>
+
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+
+  <script>
+    const render = (dataToRender) => {
+      const selector = d3.select('body')
+        .selectAll('div')
+        .data(dataToRender)
+
+      const entering = selector.enter();
+      entering.append('div').text(d => d)
+
+      selector.text(d => d)
+
+      const exiting = selector.exit();
+      exiting.remove();
+    }
+  </script>
+</body>
+
+</html>
