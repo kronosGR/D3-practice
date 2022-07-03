@@ -30,12 +30,15 @@
       return `translate(${xloc(d,i)}, ${yloc(d)})`
     };
 
+    const textTranslator = `translate(${barWidth/2}, 0)`
+
     var graphGroup = d3.select('body')
       .append('svg')
       .attr('width', '1000')
       .attr('height', '1000')
       .append('g');
 
+    // add groups and bars
     const barGroups = graphGroup.selectAll('g')
       .data(data)
       .enter()
@@ -45,6 +48,15 @@
       .attr('fill', 'steelblue')
       .attr('width', barWidth)
       .attr('height', d => d)
+
+    // add text in the groups
+    barGroups.append('text')
+      .text(d => d)
+      .attr('fill', 'black')
+      .attr('alignment-baseline', 'before-edge')
+      .attr('text-anchor', 'middle')
+      .attr('transform', textTranslator)
+      .style('font', '10px sans-serif')
   </script>
 </body>
 
