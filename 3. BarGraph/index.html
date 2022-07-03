@@ -36,12 +36,13 @@
       .attr('height', '1000')
       .append('g');
 
-    const barGroup = graphGroup.selectAll('rect')
+    const barGroups = graphGroup.selectAll('g')
       .data(data)
       .enter()
+      .append('g')
+      .attr('transform', translator)
       .append('rect')
       .attr('fill', 'steelblue')
-      .attr('transform', translator)
       .attr('width', barWidth)
       .attr('height', d => d)
   </script>
