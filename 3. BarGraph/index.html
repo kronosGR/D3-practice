@@ -20,6 +20,11 @@
 
       const maxValue = d3.max(data);
 
+      const graphWidth = data.length * (barWidth + barPadding) - barPadding;
+      const margin = { top: 10, right: 10, bottom: 10, left: 50 };
+      const totalWidth = graphWidth + margin.left + margin.right;
+      const totalHeight = maxValue + margin.top + margin.bottom;
+
       // calculate x and y
       const xloc = (d, i) => i * (barWidth + barPadding);
       const yloc = (d) => maxValue - d;
@@ -29,14 +34,31 @@
         return `translate(${xloc(d, i)}, ${yloc(d)})`;
       };
 
-      const textTranslator = `translate(${barWidth / 2}, 1120)`;
+      const textTranslator = `translate(${barWidth / 2}, 0)`;
 
-      const graphGroup = d3
+      const svg = d3
         .select("body")
         .append("svg")
-        .attr("width", "1000")
-        .attr("height", "1000")
-        .append("g");
+        .attr("width", totalWidth)
+        .attr("height", totalHeight);
+
+      svg
+        .append("rect")
+        .attr("width", totalWidth)
+        .attr("height", totalHeight)
+        .attr("fill", "white")
+        .attr("stroke", "black")
+        .attr("stroke-width", 1);
+
+      const graphGroup = svg
+        .append("g")
+        .attr("transform", `translate(${(margin.left, margin.top)})`);
+
+      graphGroup
+        .append("rect")
+        .attr("fill", "rgba(0,0,0,0.3)")
+        .attr("width", totalWidth - (margin.left + margin.right))
+        .attr("height", totalHeight - (margin.bottom + margin.top));
 
       // add groups and bars
       const barGroup = graphGroup
@@ -56,13 +78,13 @@
       barGroup
         .append("text")
         .text((d) => d)
+        .style("font", "10px sans-serif")
         .attr({
           fill: "white",
           "alignment-baseline": "before-edge",
           "text-anchor": "middle",
           transform: textTranslator,
-        })
-        .style("font", "10px sans-serif");
+        });
     </script>
   </body>
 </html>
