@@ -15,7 +15,7 @@
         210, 125, 100, 71, 75, 72, 67,
       ];
 
-      const barWidth = 15;
+      const barWidth = 20;
       const barPadding = 3;
 
       const maxValue = d3.max(data);
@@ -50,18 +50,18 @@
         .attr("stroke", "black")
         .attr("stroke-width", 1);
 
-      const graphGroup = svg
+      const mainGroup = svg
         .append("g")
-        .attr("transform", `translate(${(margin.left, margin.top)})`);
+        .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-      graphGroup
+      mainGroup
         .append("rect")
-        .attr("fill", "rgba(0,0,0,0.3)")
+        .attr("fill", "rgba(0,0,0,0.1)")
         .attr("width", totalWidth - (margin.left + margin.right))
         .attr("height", totalHeight - (margin.bottom + margin.top));
 
       // add groups and bars
-      const barGroup = graphGroup
+      const barGroup = mainGroup
         .selectAll("g")
         .data(data)
         .enter()
@@ -72,19 +72,40 @@
         .append("rect")
         .attr("width", barWidth)
         .attr("height", (d) => d)
-        .style("fill", "steelblue");
+        .attr("fill", "steelblue");
 
       // add text in the groups
       barGroup
         .append("text")
         .text((d) => d)
         .style("font", "10px sans-serif")
-        .attr({
-          fill: "white",
-          "alignment-baseline": "before-edge",
-          "text-anchor": "middle",
-          transform: textTranslator,
-        });
+        .attr("fill", "white")
+        .attr("lignment-baseline", "before-edge")
+        .attr("text-anchor", "middle")
+        .attr("transform", textTranslator);
+
+      const leftAxisGroup = svg.append("g");
+      const axisPadding = 3;
+      leftAxisGroup.attr(
+        "transform",
+        `translate(${margin.left - axisPadding},${margin.top})`
+      );
+      const scale = d3.scaleLinear().domain([maxValue, 0]).range([0, maxValue]);
+
+      const axis = d3.axisLeft().scale(scale);
+      const axisNodes = leftAxisGroup.call(axis);
+
+      const domain = axisNodes
+        .selectAll(".domain")
+        .style("fille", "none")
+        .style("stroke-width", 1)
+        .style("stroke", "black");
+
+      const ticks = axisNodes.selectAll(".tick line");
+      ticks
+        .style("fille", "none")
+        .style("stroke-width", 1)
+        .style("stroke", "black");
     </script>
   </body>
 </html>
