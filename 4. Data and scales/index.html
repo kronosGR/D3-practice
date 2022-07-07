@@ -8,16 +8,72 @@
   </head>
 
   <body>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!--    <script src="https://d3js.org/d3.v7.min.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.6.1/d3.min.js"></script>
 
     <script>
+      const minBarHeight = 100,
+        maxBarHeight = 400;
+
+      const margin = { top: 10, right: 10, bottom: 260, left: 85 };
+      const graphWidth = 500,
+        graphHeight = 300;
+
+      const totalWidth = graphWidth + margin.left + margin.right;
+      const totalHeight = graphHeight + margin.bottom + margin.top;
+
+      const axisPadding = 3;
+
       const url =
         "https://gist.githubusercontent.com/d3byex/e5ce6526ba2208014379/raw/8fefb14cc18f0440dc00248f23cbf6aec80dcc13/walking_dead_s5.json";
 
-      d3.json(url, (data) => {
-        console.log(data[0], "aaa");
+      const svg = d3
+        .select("body")
+        .append("svg")
+        .attr("transfrom", `translate(${margin.left}, ${margin.top})`);
+
+      d3.json(url).then((data) => {
+        const mappedAndConverted = data.map((d) => {
+          return {
+            Episode: +d.Episode,
+            USViewers: +d.USViewers,
+            Title: d.Title,
+          };
+        });
+        console.log(mappedAndConverted);
+
+        const viewership = mappedAndConverted.map((d) => d.USViewers);
+        const minViewership = d3.min(viewership);
+        const maxViewership = d3.max(viewership);
+
+        const bands = d3
+          .scaleOrdinal()
+          .domain([minViewership, maxViewership])
+          .range([0, graphWidth], 0.05);
+
+        const yScale = d3
+          .scaleLinear()
+          .domain(viewership)
+          .range([0, graphHeight]);
+
+        // console.log(minViewership + " -> " + yScale(minViewership));
+        // console.log(maxViewership + " -> " + yScale(maxViewership));
+        const translator = (d, i) =>
+          `translate(${bands.range()[1]},${graphHeight - yScale(d)} )`;
+
+        const barGroup = svg
+          .selectAll("g")
+          .data(viewership)
+          .enter()
+          .append("g")
+          .attr("transform", translator);
+
+        barGroup
+          .append("rect")
+          .attr("fill", "steelblue")
+          .attr("width", bands.rangeBand())
+          .attr("height", (d) => yScale(d));
       });
-      console.log("test");
     </script>
   </body>
 </html>
