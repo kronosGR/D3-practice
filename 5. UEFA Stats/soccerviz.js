@@ -91,16 +91,15 @@ function overallTeamViz(incomingData) {
   }
 
   function highlightRegion(d, i) {
-    d3.select(this).select("text").classed("active", true).attr("y", 10);
-
-    d3.selectAll("g.overallg")
+    const teamColor = d3.rgb("blue");
+    d3.select(this).select("text").classed("highlight", true).attr("y", 10);
+    d3.selectAll("g.overallG")
       .select("circle")
-      .each((p) => {
-        p.region == d.region
-          ? d3.select(this).classed("active", true)
-          : d3.select(this).classed("inactive", true);
+      .style("fill", function (p) {
+        return p.region == d.region
+          ? teamColor.darker(0.75)
+          : teamColor.brighter(0.5);
       });
-
     this.parentElement.appendChild(this);
   }
 }
