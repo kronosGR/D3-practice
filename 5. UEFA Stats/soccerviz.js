@@ -55,17 +55,18 @@ function overallTeamViz(incomingData) {
     });
 
   function buttonClick(datapoint) {
-    console.log(datapoint);
     const maxValue = d3.max(incomingData, function (d) {
-      return parseFloat(d[datapoint]);
+      return parseFloat(d[datapoint.target.innerHTML]);
     });
+    console.log(maxValue);
     const radiusScale = d3.scaleLinear().domain([0, maxValue]).range([2, 20]);
     d3.selectAll("g.overallG")
       .select("circle")
       .transition()
       .duration(1000)
       .attr("r", function (d) {
-        return radiusScale(d[datapoint]);
+        console.log(radiusScale(d[datapoint.target.innerHTML]));
+        return radiusScale(d[datapoint.target.innerHTML]);
       });
 
     teamG
@@ -77,7 +78,10 @@ function overallTeamViz(incomingData) {
       .attr("r", 40)
       .transition()
       .duration(500)
-      .attr("r", 20);
+      .attr("r", function (d) {
+        console.log(radiusScale(d[datapoint.target.innerHTML]));
+        return radiusScale(d[datapoint.target.innerHTML]);
+      });
 
     const ybRamp = d3
       .scaleLinear()
