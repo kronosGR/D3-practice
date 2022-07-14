@@ -16,7 +16,7 @@ function overallTeamViz(incomingData) {
       return "translate(" + i * 50 + ", 0)";
     });
 
-  var teamG = d3.selectAll("g.overallG");
+  const teamG = d3.selectAll("g.overallG");
 
   teamG
     .append("circle")
@@ -29,7 +29,7 @@ function overallTeamViz(incomingData) {
     .attr("r", 40)
     .transition()
     .duration(500)
-    .attr("r", 20);
+    .attr("r", (d) => d.cs);
 
   teamG
     .append("text")
@@ -55,10 +55,11 @@ function overallTeamViz(incomingData) {
     });
 
   function buttonClick(datapoint) {
-    var maxValue = d3.max(incomingData, function (d) {
+    console.log(datapoint);
+    const maxValue = d3.max(incomingData, function (d) {
       return parseFloat(d[datapoint]);
     });
-    var radiusScale = d3.scaleLinear().domain([0, maxValue]).range([2, 20]);
+    const radiusScale = d3.scaleLinear().domain([0, maxValue]).range([2, 20]);
     d3.selectAll("g.overallG")
       .select("circle")
       .transition()
@@ -77,6 +78,19 @@ function overallTeamViz(incomingData) {
       .transition()
       .duration(500)
       .attr("r", 20);
+
+    const ybRamp = d3
+      .scaleLinear()
+      .domain([0, maxValue])
+      .range(["blue", "yellow"]);
+
+    d3.selectAll("g.overallG")
+      .select("circle")
+      .attr("r", (d) => radiusScale(d[datapoint]))
+      .style("fill", (d) => {
+        console.log(d[datapoint]);
+        return ybRamp(d[datapoint]);
+      });
   }
 
   teamG.on("mouseover", highlightRegion);
