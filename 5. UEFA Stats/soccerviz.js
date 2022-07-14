@@ -70,7 +70,7 @@ function overallTeamViz(incomingData) {
       });
 
     teamG
-      .append("circle")
+      .select("circle")
       .attr("r", 0)
       .transition()
       .delay((d, i) => i * 100)
@@ -79,12 +79,12 @@ function overallTeamViz(incomingData) {
       .transition()
       .duration(500)
       .attr("r", function (d) {
-        console.log(radiusScale(d[datapoint.target.innerHTML]));
         return radiusScale(d[datapoint.target.innerHTML]);
       });
 
     const ybRamp = d3
       .scaleLinear()
+      .interpolate(d3.interpolateHsl)
       .domain([0, maxValue])
       .range(["blue", "yellow"]);
 
@@ -92,8 +92,7 @@ function overallTeamViz(incomingData) {
       .select("circle")
       .attr("r", (d) => radiusScale(d[datapoint]))
       .style("fill", (d) => {
-        console.log(d[datapoint]);
-        return ybRamp(d[datapoint]);
+        return ybRamp(d[datapoint.target.innerHTML]);
       });
   }
 
