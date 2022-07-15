@@ -32,8 +32,8 @@
 
     const xExtent = d3.extent(scatterData, (d) => d.salary);
     const yExtent = d3.extent(scatterData, (d) => d.friends);
-    const yScale = d3.scaleLinear().domain(xExtent).range([0, 500]);
-    const xScale = d3.scaleLinear().domain(yExtent).range([0, 500]);
+    const yScale = d3.scaleLinear().domain(yExtent).range([0, 500]);
+    const xScale = d3.scaleLinear().domain(xExtent).range([0, 500]);
 
     const yAxis = d3.axisRight().scale(yScale).ticks(16).tickSize(500);
     d3.select("svg").append("g").attr("id", "yAxisG").call(yAxis);
@@ -51,7 +51,7 @@
       .enter()
       .append("circle")
       .attr("r", 5)
-      .attr("cx", (d, i) => i * 10)
-      .attr("cy", (d) => d.friends);
+      .attr("cx", (d) => xScale(d.salary))
+      .attr("cy", (d) => yScale(d.friends));
   </script>
 </html>
