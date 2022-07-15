@@ -58,16 +58,28 @@ function overallTeamViz(incomingData) {
     const maxValue = d3.max(incomingData, function (d) {
       return parseFloat(d[datapoint.target.innerHTML]);
     });
-    console.log(maxValue);
+
+    const tenColorScale = d3
+      .scaleOrdinal()
+      .domain(["UEFA", "CONMEBOL", "CAF", "AFC"])
+      .range(d3.schemeCategory10)
+      .unknown("#c4b9ac");
+
     const radiusScale = d3.scaleLinear().domain([0, maxValue]).range([2, 20]);
+    // d3.selectAll("g.overallG")
+    //   .select("circle")
+    //   .transition()
+    //   .duration(1000)
+    //   .attr("r", function (d) {
+    //     console.log(radiusScale(d[datapoint.target.innerHTML]));
+    //     return radiusScale(d[datapoint.target.innerHTML]);
+    //   });
     d3.selectAll("g.overallG")
       .select("circle")
       .transition()
       .duration(1000)
-      .attr("r", function (d) {
-        console.log(radiusScale(d[datapoint.target.innerHTML]));
-        return radiusScale(d[datapoint.target.innerHTML]);
-      });
+      .style("fill", (p) => tenColorScale(p.region))
+      .attr("r", (p) => radiusScale(p[datapoint.target.innerHTML]));
 
     teamG
       .select("circle")
