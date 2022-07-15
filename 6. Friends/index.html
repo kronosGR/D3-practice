@@ -7,8 +7,8 @@
 
     <style>
       svg {
-        height: 500px;
-        width: 500px;
+        height: 550px;
+        width: 550px;
         border: 1px solid gray;
       }
     </style>
@@ -29,6 +29,21 @@
       { friends: 27, salary: 56000 },
       { friends: 8, salary: 74000 },
     ];
+
+    const xExtent = d3.extent(scatterData, (d) => d.salary);
+    const yExtent = d3.extent(scatterData, (d) => d.friends);
+    const yScale = d3.scaleLinear().domain(xExtent).range([0, 500]);
+    const xScale = d3.scaleLinear().domain(yExtent).range([0, 500]);
+
+    const yAxis = d3.axisRight().scale(yScale).ticks(16).tickSize(500);
+    d3.select("svg").append("g").attr("id", "yAxisG").call(yAxis);
+
+    const xAxis = d3.axisBottom().scale(xScale).tickSize(-500).ticks(4);
+    d3.select("svg")
+      .append("g")
+      .attr("id", "xAxisG")
+      .call(xAxis)
+      .attr("transform", "translate(0,500)");
 
     d3.select("svg")
       .selectAll("circle")
