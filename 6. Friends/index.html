@@ -50,16 +50,34 @@
         .attr("id", "xAxisG")
         .call(xAxis);
 
+      // d3.select("svg")
+      //   .selectAll("circle.median")
+      //   .data(data)
+      //   .enter()
+      //   .append("circle")
+      //   .attr("class", "tweets")
+      //   .attr("r", 5)
+      //   .attr("cx", (d) => xScale(d.day))
+      //   .attr("cy", (d) => yScale(d.median))
+      //   .style("fill", "darkgray");
+
       d3.select("svg")
-        .selectAll("circle.median")
+        .selectAll("g.box")
         .data(data)
         .enter()
-        .append("circle")
-        .attr("class", "tweets")
-        .attr("r", 5)
-        .attr("cx", (d) => xScale(d.day))
-        .attr("cy", (d) => yScale(d.median))
-        .style("fill", "darkgray");
+        .append("g")
+        .attr("class", "box")
+        .attr(
+          "transform",
+          (d) => `translate(${xScale(d.day)}, ${yScale(d.median)})`
+        )
+        .each(function (d, i) {
+          //cannot use arrow function so we can get this context
+          d3.select(this)
+            .append("rect")
+            .attr("width", 20)
+            .attr("height", yScale(d.q1) - yScale(d.q3));
+        });
     }
   </script>
 </html>
