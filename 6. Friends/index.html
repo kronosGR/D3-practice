@@ -76,7 +76,11 @@
           d3.select(this)
             .append("rect")
             .attr("width", 20)
-            .attr("height", yScale(d.q1) - yScale(d.q3));
+            .attr("height", yScale(d.q1) - yScale(d.q3))
+            .attr("x", -10)
+            .attr("y", yScale(d.q3) - yScale(d.median))
+            .style("stroke", "black")
+            .style("fill", "white");
         });
     }
   </script>
