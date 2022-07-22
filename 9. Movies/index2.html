@@ -1,0 +1,60 @@
+<html>
+  <head>
+    <title>Movies</title>
+    <meta charset="utf-8" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.6.1/d3.min.js"></script>
+    <script src="https://d3js.org/colorbrewer.v1.min.js"></script>
+
+    <style>
+      svg {
+        height: 550px;
+        width: 550px;
+        border: 1px solid gray;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="viz">
+      <svg></svg>
+    </div>
+    <div id="controls" />
+  </body>
+
+  <script>
+    d3.csv("movies.csv").then((data) => lineChart(data));
+
+    function lineChart(data) {
+      const xScale = d3.scaleLinear().domain([1, 10]).range([20, 470]);
+      const yScale = d3.scaleLinear().domain([-40, 40]).range([480, 20]);
+
+      const xAxis = d3
+        .axisBottom()
+        .scale(xScale)
+        .tickSize(480)
+        .tickValues([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+      d3.select("svg").append("g").attr("id", "xAxisG").call(xAxis);
+
+      const yAxis = d3.axisRight().scale(yScale).ticks(10).tickSize(480);
+      d3.select("svg").append("g").attr("id", "yAxisG").call(yAxis);
+
+      Object.keys(data[0]).forEach((key) => {
+        if (key !== "day") {
+          const movieArea = d3
+            .area()
+            .x((d) => xScale(d.day))
+            .y0((d) => yScale(d[key]))
+            .y1((d) => yScale(-d[key]))
+            .curve(d3.curveCardinal);
+          d3.select("svg")
+            .append("path")
+            .attr("id", `${key}Area`)
+            .attr("d", movieArea(data))
+            .attr("fill", "none")
+            .attr("stroke", "#75739F")
+            .attr("stroke-width", 3)
+            .style("opacity", 0.75);
+        }
+      });
+    }
+  </script>
+</html>
