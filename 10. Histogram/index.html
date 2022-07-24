@@ -20,5 +20,41 @@
     <div id="controls" />
   </body>
 
-  <script></script>
+  <script>
+    d3.csv("tweetdata.csv").then((data) => histogram(data));
+
+    function histogram(tweetsData) {
+      //console.log(tweetsData);
+
+      const xScale = d3.scaleLinear().domain([0, 5]).range([0, 500]);
+      const yScale = d3.scaleLinear().domain([0, 10]).range([400, 0]);
+      const xAxis = d3.axisBottom().scale(xScale).ticks(5);
+
+      const histoChart = d3.histogram();
+      histoChart
+        .domain([0, 5])
+        .thresholds([1, 2, 3, 4, 5])
+        .value((d) => d.favorites.length);
+
+      const histoData = histoChart(tweetsData);
+
+      d3.select("svg")
+        .selectAll("rect")
+        .data(histoData)
+        .enter()
+        .append("rect")
+        .attr("x", (d) => xScale(d.x0))
+        .attr("y", (d) => yScale(d.length))
+        .attr("width", (d) => xScale(d.x1 - d.x0) - 2)
+        .attr("height", (d) => 400 - yScale(d.length))
+        .style("fill", "#fcd89b");
+
+      d3.select("svg")
+        .append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0,400")
+        .call(xAxis);
+      d3.select("g.axis").selectAll("text").attr("dx", 50);
+    }
+  </script>
 </html>
