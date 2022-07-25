@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <title>Violin plots</title>
+    <meta charset="utf-8" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.6.1/d3.min.js"></script>
+    <script src="https://d3js.org/colorbrewer.v1.min.js"></script>
+
+    <style>
+      svg {
+        height: 550px;
+        width: 550px;
+        border: 1px solid gray;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="viz">
+      <svg></svg>
+    </div>
+    <div id="controls" />
+  </body>
+
+  <script>
+    let fillScale = d3.scaleOrdinal().range(["#fcd88a", "#cf7c1c", "#93c464"]);
+    let normal = d3.randomNormal();
+    let sampleData1 = d3.range(100).map((d) => normal());
+    let sampleData2 = d3.range(100).map((d) => normal());
+    let sampleData3 = d3.range(100).map((d) => normal());
+
+    let histoChart = d3.histogram();
+    histoChart
+      .domain([-3, 3])
+      .thresholds([-3, -2.5, -2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2, 2.5, 3])
+      .value((d) => d);
+
+    let yScale = d3.scaleLinear().domain([-3, 3]).range([400, 0]);
+    let yAxis = d3.axisRight().scale(yScale).tickSize(300);
+    d3.select("svg").append("g").call(yAxis);
+  </script>
+</html>
