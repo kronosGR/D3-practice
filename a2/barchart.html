@@ -22,5 +22,19 @@
     let g = svg
       .append("g")
       .attr("transform", `translate(${margin.left}, ${margin.right})`);
+
+    d3.csv("data.csv")
+      .then((data) => {
+        return data.map((d) => {
+          d.frequency = +d.frequency;
+
+          console.log(d);
+          return d;
+        });
+      })
+      .then((data) => {
+        // console.log(data);
+      })
+      .catch((err) => console.log(err));
   </script>
 </html>
