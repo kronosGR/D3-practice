@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <title>Ring Chart</title>
+    <meta charset="utf-8" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.6.1/d3.min.js"></script>
+    <script src="https://d3js.org/d3-collection.v1.min.js"></script>
+
+    <script src="https://d3js.org/colorbrewer.v1.min.js"></script>
+
+    <style>
+      svg {
+        height: 550px;
+        width: 550px;
+        border: 1px solid gray;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="viz">
+      <svg></svg>
+    </div>
+    <div id="controls" />
+  </body>
+
+  <script>
+    d3.json("tweets.json").then((data) => pieChart(data));
+    function pieChart(data) {
+      let letnestedTweets = d3
+        .nest()
+        .key((d) => d.user)
+        .entries(data.tweets);
+
+      letnestedTweets.forEach((d) => {
+        d.numTweets = d.values.length;
+        d.numFavorites = d3.sum(d.values, (p) => p.favorites.length);
+        d.numRetweets = d3.sum(d.values, (p) => p.retweets.length);
+      });
+    }
+  </script>
+</html>
