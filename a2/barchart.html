@@ -49,6 +49,16 @@
           .attr("dy", "0.71em")
           .attr("text-anchor", "end")
           .text("Frequency");
+
+        g.selectAll(".bar")
+          .data(data)
+          .enter()
+          .append("rect")
+          .attr("class", "bar")
+          .attr("x", (d) => x(d.letter))
+          .attr("y", (d) => y(d.frequency))
+          .attr("width", x.bandwidth())
+          .attr("height", (d) => height - y(d.frequency));
       })
       .catch((err) => console.log(err));
   </script>
