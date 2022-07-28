@@ -6,6 +6,7 @@
       .line {
         fill: none;
         stroke: steelblue;
+        shape-rendering: crispedges;
         stroke-width: 2px;
       }
     </style>
@@ -33,6 +34,9 @@
       });
 
       let x = d3.scaleTime().range([0, width]);
+      // show reversed
+      // let x = d3.scaleTime().range([width,0]);
+
       let y = d3.scaleLinear().range([height, 0]);
 
       x.domain(d3.extent(data, (d) => d.date));
