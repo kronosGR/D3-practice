@@ -31,7 +31,6 @@
         d.date = parseTime(d.date);
         d.close = +d.close;
       });
-      console.log(data);
 
       let x = d3.scaleTime().range([0, width]);
       let y = d3.scaleLinear().range([height, 0]);
@@ -56,7 +55,6 @@
       svg
         .append("path")
         .data([data])
-        .enter()
         .attr("class", "line")
         .attr("d", valueLine);
 
