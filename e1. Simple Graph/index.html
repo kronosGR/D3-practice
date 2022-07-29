@@ -9,6 +9,10 @@
         shape-rendering: crispedges;
         stroke-width: 2px;
       }
+
+      .axis {
+        font: 14px sans-serif;
+      }
     </style>
   </head>
   <body>
@@ -64,10 +68,11 @@
 
       svg
         .append("g")
+        .attr("class", "axis")
         .attr("transform", `translate(0, ${height})`)
         .call(d3.axisBottom(x));
 
-      svg.append("g").call(d3.axisLeft(y));
+      svg.append("g").attr("class", "axis").call(d3.axisLeft(y));
     });
   </script>
 </html>
