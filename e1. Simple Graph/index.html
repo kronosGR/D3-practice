@@ -104,6 +104,16 @@
         .style("font-size", "20px")
         .style("text-decoration", "underline")
         .text("Value vs Date Graph");
+
+      // add scatterplot
+      svg
+        .selectAll("dot")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("r", 5)
+        .attr("cx", (d) => x(d.date))
+        .attr("cy", (d) => y(d.close));
     });
   </script>
 </html>
