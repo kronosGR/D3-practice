@@ -13,6 +13,10 @@
       .axis {
         font: 14px sans-serif;
       }
+
+      .area {
+        fill: lightsteelblue;
+      }
     </style>
   </head>
   <body>
@@ -46,9 +50,19 @@
       x.domain(d3.extent(data, (d) => d.date));
       y.domain([0, d3.max(data, (d) => d.close)]);
 
+      // area
+      let area = d3
+        .area()
+        .x((d) => x(d.date))
+        .y0(height)
+        // fill the area abov
+        // .y0(0)
+        .y1((d) => y(d.close));
+
       // define line
       let valueLine = d3
         .line()
+        .curve(d3.curveBasis)
         .x((d) => x(d.date))
         .y((d) => y(d.close));
 
@@ -63,12 +77,19 @@
       svg
         .append("path")
         .data([data])
+        // dashed line
+        // .style("stroke-dasharray", "3,3")
         .attr("class", "line")
         .attr("d", valueLine);
+
+      // add the area
+      svg.append("path").data([data]).attr("class", "area").attr("d", area);
 
       svg
         .append("g")
         .attr("class", "axis")
+        // dashed line
+        // .style("stroke-dasharray", "3,3")
         .attr("transform", `translate(0, ${height})`)
         .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%Y-%m-%d")))
         .selectAll("text")
@@ -84,7 +105,12 @@
         .style("text-anchor", "middle")
         .text("Date");
 
-      svg.append("g").attr("class", "axis").call(d3.axisLeft(y));
+      svg
+        .append("g")
+        .attr("class", "axis")
+        // dashed line
+        // .style("stroke-dasharray", "3,3")
+        .call(d3.axisLeft(y));
 
       svg
         .append("text")
