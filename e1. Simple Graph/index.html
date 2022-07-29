@@ -23,7 +23,7 @@
     let margin = {
       top: 20,
       right: 20,
-      bottom: 70,
+      bottom: 100,
       left: 50,
     };
     let width = 960 - margin.left - margin.right;
@@ -70,12 +70,19 @@
         .append("g")
         .attr("class", "axis")
         .attr("transform", `translate(0, ${height})`)
-        .call(d3.axisBottom(x).ticks(10))
+        .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%Y-%m-%d")))
         .selectAll("text")
         .style("text-anchor", "end")
         .attr("dx", "-.8em")
         .attr("dy", ".15em")
         .attr("transform", "rotate(-65)");
+
+      svg
+        .append("text")
+        .attr("x", width / 2)
+        .attr("y", height + margin.top + 80)
+        .style("text-anchor", "middle")
+        .text("Date");
 
       svg.append("g").attr("class", "axis").call(d3.axisLeft(y));
     });
