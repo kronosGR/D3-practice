@@ -23,6 +23,16 @@
         stroke-width: 4px;
         opacity: 0.8;
       }
+
+      .grid line {
+        stroke: lightgray;
+        stroke-opacity: 0.7;
+        shape-rendering: crispEdges;
+      }
+
+      .grid path {
+        stroke-width: 0;
+      }
     </style>
   </head>
   <body>
@@ -147,6 +157,26 @@
         .attr("r", 5)
         .attr("cx", (d) => x(d.date))
         .attr("cy", (d) => y(d.close));
+
+      function make_x_gridlines() {
+        return d3.axisBottom(x).ticks(5);
+      }
+
+      function make_y_gridlines() {
+        return d3.axisLeft(y).ticks(5);
+      }
+      // grid X lines
+      svg
+        .append("g")
+        .attr("class", "grid")
+        .attr("transform", `translate(0, ${height})`)
+        .call(make_x_gridlines().tickSize(-height).tickFormat(""));
+
+      // grid Y lines
+      svg
+        .append("g")
+        .attr("class", "grid")
+        .call(make_y_gridlines().tickSize(-width).tickFormat(""));
     });
   </script>
 </html>
