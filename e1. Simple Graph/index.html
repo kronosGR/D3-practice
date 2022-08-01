@@ -33,6 +33,14 @@
       .grid path {
         stroke-width: 0;
       }
+
+      .axisSteelBlue text {
+        fill: steelblue;
+      }
+
+      .axisRed text {
+        fill: red;
+      }
     </style>
   </head>
   <body>
@@ -42,7 +50,7 @@
   <script>
     let margin = {
       top: 20,
-      right: 20,
+      right: 40,
       bottom: 100,
       left: 50,
     };
@@ -52,7 +60,8 @@
     const parseTime = d3.timeParse("%d-%b-%y");
 
     //  d3.csv("data.csv").then((data) => {
-    d3.csv("data2.csv").then((data) => {
+    //d3.csv("data2.csv").then((data) => {
+    d3.csv("data4.csv").then((data) => {
       data.forEach((d) => {
         d.date = parseTime(d.date);
         d.close = +d.close;
@@ -63,11 +72,14 @@
       // show reversed
       // let x = d3.scaleTime().range([width,0]);
 
-      let y = d3.scaleLinear().range([height, 0]);
+      //let y = d3.scaleLinear().range([height, 0]);
+      let y0 = d3.scaleLinear().range([height, 0]);
+      let y1 = d3.scaleLinear().range([height, 0]);
 
       x.domain(d3.extent(data, (d) => d.date));
       //y.domain([0, d3.max(data, (d) => d.close)]);
-      y.domain([0, d3.max(data, (d) => Math.max(d.close, d.open))]);
+      y0.domain([0, d3.max(data, (d) => Math.max(d.close))]);
+      y1.domain([0, d3.max(data, (d) => Math.max(d.open))]);
 
       // area
       let area = d3
@@ -83,13 +95,13 @@
         .line()
         .curve(d3.curveBasis)
         .x((d) => x(d.date))
-        .y((d) => y(d.close));
+        .y((d) => y0(d.close));
 
       // define 2nd line
       let valueLine2 = d3
         .line()
         .x((d) => x(d.date))
-        .y((d) => y(d.open));
+        .y((d) => y1(d.open));
 
       const svg = d3
         .select("body")
@@ -137,12 +149,19 @@
         .style("text-anchor", "middle")
         .text("Date");
 
+      // svg
+      //   .append("g")
+      //   .attr("class", "axis")
+      //   // dashed line
+      //   // .style("stroke-dasharray", "3,3")
+      //   .call(d3.axisLeft(y));
+
+      svg.append("g").attr("class", "axisSteelBlue").call(d3.axisLeft(y0));
       svg
         .append("g")
-        .attr("class", "axis")
-        // dashed line
-        // .style("stroke-dasharray", "3,3")
-        .call(d3.axisLeft(y));
+        .attr("class", "axisRed")
+        .attr("transform", `translate(${width},0)`)
+        .call(d3.axisLeft(y1));
 
       svg
         .append("text")
