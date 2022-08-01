@@ -51,10 +51,12 @@
 
     const parseTime = d3.timeParse("%d-%b-%y");
 
-    d3.csv("data.csv").then((data) => {
+    //  d3.csv("data.csv").then((data) => {
+    d3.csv("data2.csv").then((data) => {
       data.forEach((d) => {
         d.date = parseTime(d.date);
         d.close = +d.close;
+        d.open = +d.open;
       });
 
       let x = d3.scaleTime().range([0, width]);
@@ -64,7 +66,8 @@
       let y = d3.scaleLinear().range([height, 0]);
 
       x.domain(d3.extent(data, (d) => d.date));
-      y.domain([0, d3.max(data, (d) => d.close)]);
+      //y.domain([0, d3.max(data, (d) => d.close)]);
+      y.domain([0, d3.max(data, (d) => Math.max(d.close, d.open))]);
 
       // area
       let area = d3
@@ -82,6 +85,12 @@
         .x((d) => x(d.date))
         .y((d) => y(d.close));
 
+      // define 2nd line
+      let valueLine2 = d3
+        .line()
+        .x((d) => x(d.date))
+        .y((d) => y(d.open));
+
       const svg = d3
         .select("body")
         .append("svg")
@@ -98,8 +107,15 @@
         .attr("class", "line")
         .attr("d", valueLine);
 
+      svg
+        .append("path")
+        .data([data])
+        .attr("class", "line")
+        .style("stroke", "red")
+        .attr("d", valueLine2);
+
       // add the area
-      svg.append("path").data([data]).attr("class", "area").attr("d", area);
+      // svg.append("path").data([data]).attr("class", "area").attr("d", area);
 
       svg
         .append("g")
