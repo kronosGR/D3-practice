@@ -6,5 +6,47 @@
   <body></body>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.6.1/d3.min.js"></script>
-  <script></script>
+  <script>
+    let margin = { top: 20, right: 20, bottom: 30, left: 40 };
+    let width = 960 - margin.left - margin.right;
+    let height = 500 - margin.top - margin.bottom;
+
+    let svg = d3
+      .select("body")
+      .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    d3.csv("sales.csv").then((data) => {
+      let x = d3.scaleBand().range([0, width]).padding(0.1);
+      let y = d3.scaleLinear().range([height, 0]);
+
+      data.forEach((d) => (d.sales = +d.sales));
+
+      x.domain(data.map((d) => d.salesperson));
+      y.domain([0, d3.max(data, (d) => d.sales)]);
+
+      svg
+        .selectAll(".bar")
+        .data(data)
+        .enter()
+        .append("rect")
+        .attr("class", "bar")
+        .attr("x", (d) => x(d.salesperson))
+        .attr("y", (d) => y(d.sales))
+        .attr("width", x.bandwidth)
+        .attr("height", (d) => height - y(d.sales));
+    });
+
+    // add the x Axis
+    svg
+      .append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    // add the y Axis
+    svg.append("g").call(d3.axisLeft(y));
+  </script>
 </html>
