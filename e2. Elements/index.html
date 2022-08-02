@@ -19,6 +19,42 @@
       .attr("x", 50)
       .attr("y", 50)
       .attr("width", 100)
-      .attr("height", 100);
+      .attr("height", 100)
+      // for rounded corners
+      .attr("rx", 10)
+      .attr("ry", 10);
+
+    holder
+      .append("ellipse")
+      .attr("cx", 300)
+      .attr("cy", 200)
+      .attr("rx", 100)
+      .attr("ry", 50);
+
+    holder
+      .append("line")
+      .style("stroke", "red")
+      .attr("x1", 100)
+      .attr("y1", 150)
+      .attr("x2", 300)
+      .attr("y2", 250);
+
+    holder
+      .append("polyline")
+      .style("stroke", "green")
+      .style("fill", "yellow")
+      // x,y
+      .attr("points", "100,50,200,150,300,50");
+
+    holder
+      .append("polygon")
+      .style("stroke", "yellow")
+      // M-moveto L-Lineto C-curve-to Z-closepath
+      .attr("points", "200,250, 300,150, 300,50");
+
+    holder
+      .append("path")
+      .style("stroke", "purple")
+      .attr("d", "M 100,50, L 200,150, L 300,50 Z");
   </script>
 </html>
