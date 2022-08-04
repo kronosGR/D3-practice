@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style></style>
+  </head>
+  <body></body>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.6.1/d3.min.js"></script>
+  <script src="https://unpkg.com/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
+  <script>
+    let margin = { top: 10, right: 10, bottom: 10, left: 10 },
+      width = 900 - margin.left - margin.right,
+      height = 300 - margin.top - margin.bottom;
+
+    let formatNumer = d3.format(",.0f");
+    let format = (d) => formatNumer(d);
+    let color = d3.scaleOrdinal(d3.schemeCategory10);
+
+    let svg = d3
+      .select("body")
+      .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr(
+        "transform",
+        `translate(${margin.left},
+      ${margin.top})`
+      );
+
+    // TODO
+  </script>
+</html>
